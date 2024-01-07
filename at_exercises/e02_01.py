@@ -38,7 +38,7 @@ def impute_missing_values(data):
     imputer = SimpleImputer(strategy="median")
     data_num = data.select_dtypes(include=numpy.number)
     data_nonnum = data.select_dtypes(exclude=numpy.number)
-    data_num = imputer.fit_transform(data_num)
+    data_num = pandas.DataFrame(imputer.fit_transform(data_num), columns=data_num.columns, index=data_num.index)
     return pandas.concat([data_num, data_nonnum], axis=1)
 
 
