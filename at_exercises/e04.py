@@ -37,7 +37,7 @@ from sklearn.model_selection import StratifiedShuffleSplit, train_test_split
 
 
 def q12():
-    random.seed(1)
+    random.seed(0)
     iris = load_iris(as_frame=True)
     data, test_data, labels, test_labels = train_test_split(
         iris.data,
@@ -48,7 +48,8 @@ def q12():
     theta_initial = randn(5, 3)
     learning_rate = 0.1
     tol = 0.00001
-    return gradient_descent(theta_initial, data, labels, learning_rate, tol)
+    n_epochs = 5000
+    return gradient_descent(theta_initial, data, labels, learning_rate, tol, n_epochs)
 
 
 def predict(theta, x):
@@ -95,16 +96,17 @@ def theta_next(theta, data, labels, learning_rate):
     return theta - learning_rate * gradient(theta, data, labels)
 
 
-def gradient_descent(theta_initial, data, labels, learning_rate, tol):
+def gradient_descent(theta_initial, data, labels, learning_rate, tol, n_epochs):
     prev_cost = cost(theta_initial, data, labels)
     new_cost = prev_cost - 2 * tol
     theta = theta_initial
     i = 0
-    while new_cost <= prev_cost:
-        print(f"step_{i}")
+    while (new_cost <= prev_cost) and i < n_epochs:
         prev_cost = new_cost.copy()
         theta = theta_next(theta, data, labels, learning_rate)
         new_cost = cost(theta, data, labels)
-        print(f"cost: {new_cost}")
+        if i % 1000 == 0:
+            print(f"step_{i}")
+            print(f"cost: {new_cost}")
         i += 1
     return theta
